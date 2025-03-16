@@ -48,4 +48,23 @@ body: {
 ![hld](/healthcare/vaccine-tracker/hld.png)
 
 ## Deep Dive
+Initial Deep Dive
 ![dd](/healthcare/vaccine-tracker/dd.png)
+
+Deep Dive Practice on Text:
+
+To process vaccinations and query analytics in real time, we can have these two approaches.
+
+Batch Process
+- Separate DB (handles heavy writes) holding raw vaccination events
+- CRON job runs to aggregate the vaccination events and provide the stats for fully vax, partial vax, and not vax
+- CRON job pushes that aggregation to database for analytics service to query the for the most recent aggregation when a analyst wants to know the stats
+
+- Not real time
+- Processing is delayed to CRON schedule
+
+Real Time Process
+- Utilize the same DB
+- Vax service produces event to a stream like Kafka
+- Stream consumer like Spark Streaming can read from Kafka and aggregate vax analytics in real time (real time experience depends on aggregation window)
+- Push updated aggregation to DB in real time
